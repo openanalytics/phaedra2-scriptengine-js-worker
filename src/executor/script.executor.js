@@ -4,16 +4,11 @@ let activeInvocationCount = 0;
 const executorStateCallbacks = [];
 const scriptExecutorCapacity = parseInt(process.env.EXECUTOR_CAPACITY || 4);
 
-const kafkaConfig = require('../kafka/config');
-const kafkaProducer = kafkaConfig.makeProducer();
-kafkaProducer.connect();
-
 const defaultScriptContext = {
     console: console,
     require: require,
-    measurementService: require('../rest.client/measurement.service.client'),
-    metadataService: require('../rest.client/metadata.service.client'),
-    kafka: kafkaProducer,
+    measurementService: require('../client/measurement.service.client'),
+    metadataService: require('../client/metadata.service.client'),
     s3: require('../context/s3.api'),
     sourcePathUtils: require('../context/source.path.utils'),
     plateUtils: require('../context/plate.utils'),

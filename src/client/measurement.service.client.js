@@ -3,6 +3,10 @@
 const axios = require('axios')
 const oauth2 = require('../auth/oauth2.client')
 
+const kafkaConfig = require('../kafka/config');
+const kafkaProducer = kafkaConfig.makeProducer();
+kafkaProducer.connect();
+
 module.exports = {
 
     createMeasurement: async (measurement) => {
@@ -36,6 +40,35 @@ module.exports = {
             url: url,
             data: imageData,
             headers: headers
+        });
+    },
+
+    saveWellData: async (measurementId, columnName, values) => {
+        const body = {
+            measurementId: measurementId,
+            column: columnName,
+            data: values
+        };
+        await kafkaProducer.send({
+            topic: kafkaConfig.TOPIC_MEASUREMENTS,
+            messages: [
+                { key: kafkaConfig.EVENT_REQUEST_MEAS_SAVE_WELLDATA, value: JSON.stringify(body) }
+            ]
+        });
+    },
+    
+    saveSubWellData: async (measurementId, wellNr, columnName, values) => {
+        const body = {
+            measurementId: measurementId,
+            wellNr: wellNr,
+            column: columnName,
+            data: values
+        };
+        await kafkaProducer.send({
+            topic: kafkaConfig.TOPIC_MEASUREMENTS,
+            messages: [
+                { key: kafkaConfig.EVENT_REQUEST_MEAS_SAVE_SUBWELLDATA, value: JSON.stringify(body) }
+            ]
         });
     }
 }
