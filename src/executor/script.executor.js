@@ -47,6 +47,11 @@ exports.invokeScript = async (script, context) => {
         vm.runInContext(wrappedCode, ctx);
         await ctx.executionPromise;
 
+        if (ctx.output == null) {
+            // If no explicit output was provided, return the original context (which may have been modified by the script).
+            ctx.output = context;
+        }
+
         return ctx.output;
     } finally {
         updateExecutorState(activeInvocationCount - 1);
