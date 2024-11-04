@@ -1,6 +1,6 @@
 {
   "name": "phaedra2-scriptengine-js-worker",
-  "version": "2.3.0-SNAPSHOT",
+  "version": "2.3.0",
   "description": "",
   "main": "app.js",
   "repository": {
