@@ -11,7 +11,9 @@ const defaultConfig = {
 exports.encode = async (inPath, outPath, config) => {
     if (!config) config = defaultConfig;
 
-    let cmd = "java -jar " + imagingLib
+    let cmd = "java"
+        + (config.codec ? (" -Dphaedra2.imaging.jp2k.codec=" + config.codec) : "")
+        + " -jar " + imagingLib
         + " encode -i " + inPath + " -o " + outPath
         + " -reversible " + (config.reversible || defaultConfig.reversible)
         + (config.depth ? (" -depth " + config.depth) : "");
