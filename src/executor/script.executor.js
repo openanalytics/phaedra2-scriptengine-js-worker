@@ -13,7 +13,8 @@ const defaultScriptContext = {
     sourcePathUtils: require('../context/source.path.utils'),
     plateUtils: require('../context/plate.utils'),
     imageCodec: require('../context/image.codec.jp2k'),
-    imageIdentifier: require('../context/image.identifier')
+    imageIdentifier: require('../context/image.identifier'),
+    queueManager: require('../util/microqueue')
 };
 
 const updateExecutorState = (newActiveInvocationCount) => {
