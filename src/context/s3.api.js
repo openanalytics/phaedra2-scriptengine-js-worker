@@ -30,6 +30,13 @@ exports.getBytes = async (inPath) => {
     return res.Body;
 }
 
+exports.getAsString = async (inPath) => {
+    let urlParts = splitS3URL(inPath);
+    let res = await client.send(new GetObjectCommand({Bucket: urlParts.bucket, Key: urlParts.key}));
+    let stringResult = (await res.Body.toArray()).map(buf => buf.toString()).join('');
+	return stringResult;
+}
+
 exports.list = async (path) => {
     let urlParts = splitS3URL(path);
     let prefix = urlParts.key;

@@ -3,6 +3,7 @@ const vm = require('node:vm');
 let activeInvocationCount = 0;
 const executorStateCallbacks = [];
 const scriptExecutorCapacity = parseInt(process.env.EXECUTOR_CAPACITY || 4);
+const startupScriptURL = process.env.STARTUP_SCRIPT_URL;
 
 const defaultScriptContext = {
     console: console,
@@ -32,6 +33,22 @@ exports.SCRIPT_LANGUAGE_JS = "JS";
 
 exports.addExecutorStateCallback = (callback) => {
     executorStateCallbacks.push(callback);
+};
+
+exports.initialize = async () => {
+    if (startupScriptURL) {
+        const scripts = (await defaultScriptContext.s3.list(startupScriptURL)).filter(script => script.toLowerCase().endsWith(".js")).sort();
+        console.log(`Running ${scripts.length} startup script(s) from ${startupScriptURL}`);
+        for (const script of scripts) {
+            console.log(`Invoking startup script: ${script}`);
+            try {
+                const scriptBody = await defaultScriptContext.s3.getAsString(script);
+                exports.invokeScript(scriptBody);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    }
 };
 
 exports.invokeScript = async (script, context) => {
