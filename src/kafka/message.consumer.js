@@ -49,6 +49,8 @@ module.exports = {
             else consumer.pause([{ topic: config.TOPIC_SCRIPTENGINE }]);
         });
 
+        await scriptExecutor.initialize();
+        
         await consumer.run({
             eachMessage: async ({topic, partition, message}) => {
                 try {

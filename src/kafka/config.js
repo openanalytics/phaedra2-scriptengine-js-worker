@@ -14,7 +14,7 @@ shutdownHandler(async () => {
     }
 });
 
-exports.GROUP_ID = "scriptengine-js-worker"
+exports.GROUP_ID = process.env.KAFKA_GROUP_ID || "scriptengine-js-worker";
 
 exports.TOPIC_SCRIPTENGINE = "scriptengine"
 exports.TOPIC_MEASUREMENTS = "measurements"
