@@ -43,13 +43,13 @@ module.exports = {
         await consumer.connect();
         await consumer.subscribe({ topic: config.TOPIC_SCRIPTENGINE, fromBeginning: false });
 
+        await scriptExecutor.initialize();
+
         scriptExecutor.addExecutorStateCallback(acceptingScripts => {
-            console.log(`Script executor is accepting new invocations? ${acceptingScripts}`);
+            // console.log(`Script executor is accepting new invocations? ${acceptingScripts}`);
             if (acceptingScripts) consumer.resume([{ topic: config.TOPIC_SCRIPTENGINE }]);
             else consumer.pause([{ topic: config.TOPIC_SCRIPTENGINE }]);
         });
-
-        await scriptExecutor.initialize();
         
         await consumer.run({
             eachMessage: async ({topic, partition, message}) => {
