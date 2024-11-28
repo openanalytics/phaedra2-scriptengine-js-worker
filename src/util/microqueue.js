@@ -15,8 +15,13 @@ function createQueue(parallellism) {
 
     const queue = {
         parallellism: parallellism || 1,
-        jobs: []
+        jobs: [],
+        trackContexts: []
     };
+
+    for (let t = 0; t < queue.parallellism; t++) {
+        queue.trackContexts[t] = {};
+    }
 
     queue.add = (jobFunction) => {
         const jobDef = {
@@ -31,21 +36,21 @@ function createQueue(parallellism) {
         queue.nextJobId = 0;
         const tracks = [];
         for (let p=0; p < queue.parallellism; p++) {
-            tracks[p] = queue._runTrack();
+            tracks[p] = queue._runTrack(p);
         }
         await Promise.all(tracks);
     };
 
-    queue._runTrack = async () => {
+    queue._runTrack = async (trackNr) => {
         while (queue.nextJobId < queue.jobs.length) {
-            await queue._runNextJob();
+            await queue._runNextJob(trackNr);
         }
     };
 
-    queue._runNextJob = async () => {
+    queue._runNextJob = async (trackNr) => {
         const jobId = queue.nextJobId;
         queue.nextJobId++;
-        queue.jobs[jobId].retVal = await queue.jobs[jobId].fn();
+        queue.jobs[jobId].retVal = await queue.jobs[jobId].fn(queue.trackContexts[trackNr] || {});
     };
 
     return queue;
