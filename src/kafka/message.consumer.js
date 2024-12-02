@@ -4,7 +4,9 @@ const producer = config.makeProducer();
 
 const handleMessage = async (message) => {
     const key = message.key.toString();
-    if (key != config.EVENT_REQUEST_SCRIPT_EXECUTION) return;
+    // Note: keys may contain a custom suffix, which is ignored here.
+    if (!key.startsWith(config.EVENT_REQUEST_SCRIPT_EXECUTION)) return;
+    
     const scriptRequest = JSON.parse(message.value.toString());
     const scriptLanguage = scriptRequest.language;
     if (scriptLanguage != scriptExecutor.SCRIPT_LANGUAGE_JS) return;
