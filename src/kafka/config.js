@@ -16,11 +16,10 @@ shutdownHandler(async () => {
 
 exports.GROUP_ID = process.env.KAFKA_GROUP_ID || "scriptengine-js-worker";
 
-exports.TOPIC_SCRIPTENGINE = "scriptengine"
+exports.TOPIC_SCRIPTENGINE_REQUESTS = "scriptengine-requests"
+exports.TOPIC_SCRIPTENGINE_UPDATES = "scriptengine-updates"
 exports.TOPIC_MEASUREMENTS = "measurements"
 
-exports.EVENT_REQUEST_SCRIPT_EXECUTION = "requestScriptExecution"
-exports.EVENT_SCRIPT_EXECUTION_UPDATE = "scriptExecutionUpdate"
 exports.EVENT_REQUEST_MEAS_SAVE_WELLDATA = "requestMeasurementSaveWellData"
 exports.EVENT_REQUEST_MEAS_SAVE_SUBWELLDATA = "requestMeasurementSaveSubwellData"
 

@@ -3,10 +3,6 @@ const scriptExecutor = require('../executor/script.executor');
 const producer = config.makeProducer();
 
 const handleMessage = async (message) => {
-    const key = message.key.toString() || "";
-    // Note: keys may contain a custom suffix, which is ignored here.
-    if (!key.startsWith(config.EVENT_REQUEST_SCRIPT_EXECUTION)) return;
-
     const scriptRequest = JSON.parse(message.value.toString());
     const scriptLanguage = scriptRequest.language;
     if (scriptLanguage != scriptExecutor.SCRIPT_LANGUAGE_JS) return;
@@ -29,9 +25,8 @@ const handleMessage = async (message) => {
     }
 
     await producer.send({
-        topic: config.TOPIC_SCRIPTENGINE,
+        topic: config.TOPIC_SCRIPTENGINE_UPDATES,
         messages: [{
-            key: config.EVENT_SCRIPT_EXECUTION_UPDATE,
             value: JSON.stringify(response)
         }]
     });
@@ -43,14 +38,14 @@ module.exports = {
 
         const consumer = config.makeConsumer();
         await consumer.connect();
-        await consumer.subscribe({ topic: config.TOPIC_SCRIPTENGINE, fromBeginning: false });
+        await consumer.subscribe({ topic: config.TOPIC_SCRIPTENGINE_REQUESTS, fromBeginning: false });
 
         await scriptExecutor.initialize();
 
         scriptExecutor.addExecutorStateCallback(acceptingScripts => {
             // console.log(`Script executor is accepting new invocations? ${acceptingScripts}`);
-            if (acceptingScripts) consumer.resume([{ topic: config.TOPIC_SCRIPTENGINE }]);
-            else consumer.pause([{ topic: config.TOPIC_SCRIPTENGINE }]);
+            if (acceptingScripts) consumer.resume([{ topic: config.TOPIC_SCRIPTENGINE_REQUESTS }]);
+            else consumer.pause([{ topic: config.TOPIC_SCRIPTENGINE_REQUESTS }]);
         });
         
         await consumer.run({
