@@ -56,8 +56,15 @@ module.exports = {
             ]
         });
     },
+
+    saveSubWellData: async (measId, wellNr, dataMap) => {
+        const url = makeURL(`/measurements/${measId}/subwelldata/well/${wellNr}`);
+        const body = JSON.stringify(dataMap);
+        const headers = await buildRequestHeaders();
+        await axios.post(url, body, { headers: headers });
+    },
     
-    saveSubWellData: async (measurementId, wellNr, columnName, values) => {
+    saveSubWellDataAsync: async (measurementId, wellNr, columnName, values) => {
         const body = {
             measurementId: measurementId,
             wellNr: wellNr,
