@@ -30,18 +30,22 @@ kafkaProducer.connect();
 module.exports = {
 
     createMeasurement: async (measurement) => {
+        const measBody = structuredClone(measurement);
+        delete measBody.properties;
+
         const url = makeURL('/measurements');
-        const body = JSON.stringify(measurement);
         const headers = await buildRequestHeaders();
-        const response = await axios.post(url, body, { headers: headers });
+        const response = await axios.post(url, JSON.stringify(measBody), { headers: headers });
         measurement.id = response.data.id;
     },
 
     updateMeasurement: async (measurement) => {
+        const measBody = structuredClone(measurement);
+        delete measBody.properties;
+
         const url = makeURL(`/measurements/${measurement.id}`);
-        const body = JSON.stringify(measurement);
         const headers = await buildRequestHeaders();
-        const response = await axios.put(url, body, { headers: headers });
+        const response = await axios.put(url, JSON.stringify(measBody), { headers: headers });
         measurement.id = response.data.id;
     },
 
