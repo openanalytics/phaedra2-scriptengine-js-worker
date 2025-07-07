@@ -1,20 +1,20 @@
 {
-    "name": "phaedra2-scriptengine-js-worker",
-    "version": "2.8.0-SNAPSHOT",
-    "description": "Phaedra2 ScriptEngine JS Worker",
-    "main": "app.js",
-    "contributors": [
-        "sasa.berberovic@openanalytics.eu",
-        "frederick.michielssen@openanalytics.eu"
-    ],
-    "license": "Apache-2.0",
-    "dependencies": {
-        "@aws-sdk/client-s3": "^3.357.0",
-        "axios": "^1.7.2",
-        "dotenv": "^16.0.0",
-        "kafkajs": "^2.2.4",
-        "oracledb": "^6.8.0",
-        "pg": "^8.16.0",
-        "simple-oauth2": "^5.0.0"
-    }
+  "name": "phaedra2-scriptengine-js-worker",
+  "version": "2.8.0",
+  "description": "Phaedra2 ScriptEngine JS Worker",
+  "main": "app.js",
+  "contributors":   [
+    "sasa.berberovic@openanalytics.eu",
+    "frederick.michielssen@openanalytics.eu"
+  ],
+  "license": "Apache-2.0",
+  "dependencies":   {
+    "@aws-sdk/client-s3": "^3.357.0",
+    "axios": "^1.7.2",
+    "dotenv": "^16.0.0",
+    "kafkajs": "^2.2.4",
+    "oracledb": "^6.8.0",
+    "pg": "^8.16.0",
+    "simple-oauth2": "^5.0.0"
+  }
 }
